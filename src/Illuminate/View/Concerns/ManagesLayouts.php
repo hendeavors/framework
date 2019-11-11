@@ -91,6 +91,9 @@ trait ManagesLayouts
         if ($overwrite) {
             $this->sections[$last] = ob_get_clean();
         } else {
+            for ($i = 0; $i < $this->sectionStackCount(); $i++) {
+                ob_get_clean();
+            }
             $this->extendSection($last, ob_get_clean());
         }
 
@@ -216,5 +219,15 @@ trait ManagesLayouts
     {
         $this->sections = [];
         $this->sectionStack = [];
+    }
+
+    /**
+     * Safely acquire the section stack count.
+     *
+     * @return int
+     */
+    protected function sectionStackCount()
+    {
+        return is_array($this->sectionStack) ? count($this->sectionStack) : 0;
     }
 }
