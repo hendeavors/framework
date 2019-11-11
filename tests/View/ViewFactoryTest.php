@@ -514,6 +514,17 @@ class ViewFactoryTest extends TestCase
         $factory->stopSection();
     }
 
+    public function testExtraStartSectionCallThrowsException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot leave a section open.');
+
+        $factory = $this->getFactory();
+        $factory->startSection('foo');
+        $factory->startSection('foo');
+        $factory->stopSection();
+    }
+
     public function testExtraAppendSectionCallThrowsException()
     {
         $this->expectException(InvalidArgumentException::class);

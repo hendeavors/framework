@@ -29,6 +29,13 @@ trait ManagesLayouts
     protected static $parentPlaceholder = [];
 
     /**
+     * The amount of times @stop is executed.
+     *
+     * @var int
+     */
+    protected $stopSectionStackExecuted = 0;
+
+    /**
      * Start injecting content into a section.
      *
      * @param  string  $section
@@ -84,6 +91,14 @@ trait ManagesLayouts
     {
         if (empty($this->sectionStack)) {
             throw new InvalidArgumentException('Cannot end a section without first starting one.');
+        }
+
+        if (++$this->stopSectionStackExecuted < $this->sectionStackCount()) {
+            foreach ($this->sectionStack as $section) {
+                ob_get_clean();
+            }
+
+            throw new InvalidArgumentException('Cannot leave a section open.');
         }
 
         $last = array_pop($this->sectionStack);
@@ -216,5 +231,15 @@ trait ManagesLayouts
     {
         $this->sections = [];
         $this->sectionStack = [];
+    }
+
+    /**
+     * Safely acquire the section stack count.
+     *
+     * @return int
+     */
+    protected function sectionStackCount()
+    {
+        return is_array($this->sectionStack) ? count($this->sectionStack) : 0;
     }
 }
