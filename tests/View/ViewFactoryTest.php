@@ -514,6 +514,16 @@ class ViewFactoryTest extends TestCase
         $factory->stopSection();
     }
 
+    public function testExtraStartSectionCallIsCleaned()
+    {
+        $factory = $this->getFactory();
+        $factory->startSection('foo');
+        echo 'hi';
+        $factory->startSection('foo');
+        $factory->stopSection();
+        $this->assertSame("hi", $factory->getSection('foo'));
+    }
+
     public function testExtraAppendSectionCallThrowsException()
     {
         $this->expectException(InvalidArgumentException::class);
