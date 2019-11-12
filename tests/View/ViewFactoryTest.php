@@ -521,7 +521,7 @@ class ViewFactoryTest extends TestCase
         $factory->startSection('foo');
         echo 'hi';
         $factory->stopSection();
-        $this->assertSame("hi", $factory->getSection('foo'));
+        $this->assertSame("hi", $factory->yieldContent('foo'));
     }
 
     public function testExtraAppendSectionCallThrowsException()
