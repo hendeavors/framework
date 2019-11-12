@@ -91,9 +91,6 @@ trait ManagesLayouts
         if ($overwrite) {
             $this->sections[$last] = ob_get_clean();
         } else {
-            for ($i = 0; $i < $this->sectionStackCount(); $i++) {
-                ob_get_clean();
-            }
             $this->extendSection($last, ob_get_clean());
         }
 
@@ -133,6 +130,10 @@ trait ManagesLayouts
      */
     protected function extendSection($section, $content)
     {
+        for ($i = 0; $i < $this->sectionStackCount(); $i++) {
+            $content .= ob_get_clean();
+        }
+
         if (isset($this->sections[$section])) {
             $content = str_replace(static::parentPlaceholder($section), $content, $this->sections[$section]);
         }

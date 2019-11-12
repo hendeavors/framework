@@ -518,8 +518,8 @@ class ViewFactoryTest extends TestCase
     {
         $factory = $this->getFactory();
         $factory->startSection('foo');
-        echo 'hi';
         $factory->startSection('foo');
+        echo 'hi';
         $factory->stopSection();
         $this->assertSame("hi", $factory->getSection('foo'));
     }
